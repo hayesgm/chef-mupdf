@@ -1,9 +1,9 @@
 
 case node[:platform]
 when 'centos','redhat','fedora', 'amazon'
-  %w{build-essential pkgconfig libx11-devel libxext-devel}.each { |pkg| package pkg }
+  %w{pkgconfig libx11-devel libxext-devel}.each { |pkg| package pkg }
 when 'debian','ubuntu'
-  %w{build-essential pkg-config libx11-dev libxext-dev}.each { |pkg| package pkg }
+  %w{pkg-config libx11-dev libxext-dev}.each { |pkg| package pkg }
 end
 
 remote_file "/tmp/mupdf-#{node[:mupdf][:version]}-source.tar.gz" do
