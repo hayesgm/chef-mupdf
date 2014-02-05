@@ -1,4 +1,11 @@
 
+case node[:platform]
+when 'centos','redhat','fedora','amazon'
+  %w{pkgconfig libx11 libxext}.each { |pkg| package pkg }
+when 'debian','ubuntu'
+  %w{pkg-config libx11-dev libxext-dev}.each { |pkg| package pkg }
+end
+
 remote_file "/tmp/mupdf-#{node[:mupdf][:version]}-source.tar.gz" do
   source "https://mupdf.googlecode.com/files/mupdf-#{node[:mupdf][:version]}-source.tar.gz"
   checksum node[:mupdf][:checksum]
@@ -6,11 +13,11 @@ remote_file "/tmp/mupdf-#{node[:mupdf][:version]}-source.tar.gz" do
 end
 
 bash "install_mupdf" do
-  not_if "/usr/local/bin/mudraw --version | grep -q '#{node[:mupdf][:version]}'"
+  not_if {File.exists?("/usr/local/bin/mudraw")}
   user "root"
   cwd "/tmp"
   code <<-EOH
     tar -zxf mupdf-#{node[:mupdf][:version]}-source.tar.gz
-    (cd mupdf-#{node[:mupdf][:version]}-source/ && make && make install)
+    (cd mupdf-#{node[:mupdf][:version]}-source/ && make build=release && make install)
   EOH
 end
