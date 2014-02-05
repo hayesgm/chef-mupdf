@@ -1,11 +1,16 @@
 
+remote_file "/tmp/mupdf-#{node[:mupdf][:version]}-source.tar.gz" do
+  source "https://mupdf.googlecode.com/files/mupdf-#{node[:mupdf][:version]}-source.tar.gz"
+  checksum node[:mupdf][:checksum]
+  notifies :run, "bash[install_mupdf]", :immediately
+end
+
 bash "install_mupdf" do
-  not_if "/usr/local/bin/mudraw --version | grep -q '#{node[:program][:version]}'"
+  not_if "/usr/local/bin/mudraw --version | grep -q '#{node[:mupdf][:version]}'"
   user "root"
   cwd "/tmp"
   code <<-EOH
-    wget https://mupdf.googlecode.com/files/mupdf-#{node[:program][:version]}-source.tar.gz -O /tmp/mupdf-#{node[:program][:version]}.tar.gz
-    tar -zxf mupdf-#{node[:program][:version]}.tar.gz
-    (cd mupdf-#{node[:program][:version]}/ && ./configure && make && make install)
+    tar -zxf mupdf-#{node[:mupdf][:version]}-source.tar.gz
+    (cd mupdf-#{node[:mupdf][:version]}-source/ && make && make install)
   EOH
 end
