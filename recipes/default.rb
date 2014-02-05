@@ -1,7 +1,7 @@
 
 case node[:platform]
-when 'centos','redhat','fedora','amazon'
-  %w{pkgconfig libx11 libxext}.each { |pkg| package pkg }
+when 'centos','redhat','fedora', 'amazon'
+  %w{pkgconfig libx11-devel libxext-devel}.each { |pkg| package pkg }
 when 'debian','ubuntu'
   %w{pkg-config libx11-dev libxext-dev}.each { |pkg| package pkg }
 end
