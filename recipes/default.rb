@@ -1,6 +1,6 @@
 
 remote_file "/tmp/mupdf-#{node[:mupdf][:version]}-source.tar.gz" do
-  source "http://www.mupdf.com/download/archive/mupdf-#{node[:mupdf][:version]}-source.tar.gz"
+  source "http://mupdf.com/downloads/archive/mupdf-#{node[:mupdf][:version]}-source.tar.gz"
   checksum node[:mupdf][:checksum]
   notifies :run, "bash[install_mupdf]", :immediately
 end
